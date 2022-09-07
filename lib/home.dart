@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:blind_typing/features/typing/typing_game.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
@@ -6,6 +6,8 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      body: TypingGame(),
+    );
   }
 }
