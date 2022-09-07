@@ -39,9 +39,9 @@ class TypingGame extends HookWidget {
     useEffect(() {
       HardwareKeyboard.instance.addHandler((event) {
         keyboardDetector(event, pressingKeyState.value, onPressedChanged: () {
-          if (event.logicalKey.debugName == 'Space') {
+          if (event.logicalKey == LogicalKeyboardKey.space) {
             pressingKeyState.value = 'Space';
-          } else if (event.logicalKey.debugName == 'Escape') {
+          } else if (event.logicalKey == LogicalKeyboardKey.escape) {
             pressingKeyState.value = 'Escape';
           } else {
             pressingKeyState.value = event.character?.toUpperCase();
@@ -50,7 +50,7 @@ class TypingGame extends HookWidget {
           pressingKeyState.value = null;
         });
 
-        return false;
+        return true;
       });
       return null;
     }, []);
