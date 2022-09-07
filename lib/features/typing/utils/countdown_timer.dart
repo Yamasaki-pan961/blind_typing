@@ -28,10 +28,10 @@ class CountdownTimer {
     _timer ??= Timer.periodic(_tick, _onTicked);
   }
 
-  void stop() {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
+  void reset() {
+    _timer?.cancel();
+    _timer = null;
+    _elapsed = const Duration(seconds: 0);
   }
 
   void _onTicked(Timer t) {
