@@ -6,6 +6,8 @@ workflows:
     name: Master CI/CD
     max_build_duration: 60
     environment:
+      groups:
+        - prod
       flutter: default
       xcode: latest
       cocoapods: default
@@ -28,6 +30,7 @@ workflows:
       
       - name: Publish to Firebase Hosting
         script: |
+          echo $FIREBASE_TOKEN
           firebase deploy --token "$FIREBASE_TOKEN"
 
     artifacts:
