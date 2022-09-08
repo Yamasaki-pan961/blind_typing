@@ -17,11 +17,12 @@ workflows:
           include: true
           source: true
     scripts:
+      - name: Get Package & config
+        script: |
+          flutter packages pub get
+          flutter config --enable-web
       - name: Build for Web
-        - flutter packages pub get
-        - flutter config --enable-web
-        - |
-          # build web
+        script: |
           flutter build web --release
           cd build/web
           7z a -r ../web.zip ./*
@@ -44,7 +45,6 @@ workflows:
       cocoapods: default
     triggering:
       events:
-        - push
         - pull_request
       branch_patterns:
         - pattern: 'master'
@@ -52,19 +52,25 @@ workflows:
           source: true
       cancel_previous_builds: true
     scripts:
+      - name: Get Package & config
+        script: |
+          flutter packages pub get
+          flutter config --enable-web
+      - name: Unit Test
+        script: |
+          mkdir -p test-results
+          flutter test --machine > test-results/flutter.json      
+        test_report: test-results/flutter.json
+      - name: Integration tests Web
+        script: |
+          flutter config --enable-web
+          chromedriver --port=4444 &
+          flutter -d chrome drive --driver=test_driver/integration_driver.dart --target=integration_test/app_test.dart 
       - name: Build for Web
-        - flutter packages pub get
-        - flutter config --enable-web
-        - |
-          # build web
+        script: |
           flutter build web --release
           cd build/web
           7z a -r ../web.zip ./*
-    artifacts:
-      - build/web.zip
-      - '*.snap'
-      - build/windows/**/*.msix
-      - flutter_drive.log
     publishing:
       email:
         recipients:
