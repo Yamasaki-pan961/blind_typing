@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:blind_typing/features/typing/const/keyboard.dart';
 import 'package:blind_typing/features/typing/countdown_timer_widget.dart';
 import 'package:blind_typing/features/typing/utils/extension/random_list.dart';
@@ -9,7 +7,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 enum GameStateType {
   beforeStart,
-  ready,
   playing,
   finished;
 
@@ -88,12 +85,16 @@ class TypingGame extends HookWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(gameState.value.toString()),
-            if (gameState.value == GameStateType.beforeStart)
-              Text(
-                "[ スペース ]で開始",
-                style: Theme.of(context).textTheme.displaySmall,
+            if (gameState.value == GameStateType.beforeStart) ...[
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "[ スペース ]で開始",
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
               ),
+              const Text('[ Esc ] でリセット')
+            ],
             if (gameState.value == GameStateType.playing) ...[
               CountdownTimerWidget(
                   timeLimit: const Duration(seconds: 40),
