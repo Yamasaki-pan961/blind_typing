@@ -6,6 +6,8 @@ workflows:
     name: Master CI/CD
     max_build_duration: 60
     environment:
+      groups:
+        - prod
       flutter: default
       xcode: latest
       cocoapods: default
