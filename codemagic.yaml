@@ -56,11 +56,6 @@ workflows:
           mkdir -p test-results
           flutter test --machine > test-results/flutter.json      
         test_report: test-results/flutter.json
-      - name: Integration tests Web
-        script: |
-          flutter config --enable-web
-          chromedriver --port=4444 &
-          flutter -d chrome drive --driver=test_driver/integration_driver.dart --target=integration_test/app_test.dart 
       - name: Build for Web
         script: |
           flutter build web --release
