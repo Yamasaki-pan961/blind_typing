@@ -45,11 +45,6 @@ workflows:
     triggering:
       events:
         - pull_request
-      branch_patterns:
-        - pattern: '*'
-        - pattern: 'master'
-          include: false
-          source: false
       cancel_previous_builds: true
     scripts:
       - name: Get Package & config
