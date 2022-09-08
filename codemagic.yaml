@@ -30,7 +30,6 @@ workflows:
       
       - name: Publish to Firebase Hosting
         script: |
-          echo $FIREBASE_TOKEN
           firebase deploy --token "$FIREBASE_TOKEN"
 
     artifacts:
