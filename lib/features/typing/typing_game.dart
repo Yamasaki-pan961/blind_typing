@@ -89,19 +89,19 @@ class TypingGame extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(gameState.value.toString()),
-            CountdownTimerWidget(
-                timeLimit: const Duration(seconds: 40),
-                tick: const Duration(milliseconds: 10),
-                onEndedCallback: () {
-                  gameState.value = GameStateType.finished;
-                },
-                isCountdown: isCountDown),
             if (gameState.value == GameStateType.beforeStart)
               Text(
-                "Press SpaceKey to Start",
-                style: Theme.of(context).textTheme.bodyLarge,
+                "[ スペース ]で開始",
+                style: Theme.of(context).textTheme.displaySmall,
               ),
             if (gameState.value == GameStateType.playing) ...[
+              CountdownTimerWidget(
+                  timeLimit: const Duration(seconds: 40),
+                  tick: const Duration(milliseconds: 10),
+                  onEndedCallback: () {
+                    gameState.value = GameStateType.finished;
+                  },
+                  isCountdown: isCountDown),
               Text(
                 targetKeyState.value,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -119,9 +119,6 @@ class TypingGame extends HookWidget {
                   ),
                 ],
               ),
-            ],
-            if (gameState.value == GameStateType.playing ||
-                gameState.value == GameStateType.finished) ...[
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -148,6 +145,37 @@ class TypingGame extends HookWidget {
                   ),
                 ],
               )
+            ],
+            if (gameState.value == GameStateType.finished) ...[
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Score: ',
+                      style: Theme.of(context).textTheme.displaySmall),
+                  Text(
+                    successCountState.value.toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMedium
+                        ?.copyWith(color: Colors.green),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Miss: ',
+                      style: Theme.of(context).textTheme.displaySmall),
+                  Text(
+                    warnCountState.value.toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMedium
+                        ?.copyWith(color: Colors.red),
+                  ),
+                ],
+              ),
+              const Text('[ Esc ] でリセット'),
             ]
           ],
         ),
