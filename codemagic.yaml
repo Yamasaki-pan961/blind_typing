@@ -25,6 +25,11 @@ workflows:
           flutter build web --release
           cd build/web
           7z a -r ../web.zip ./*
+      
+      - name: Publish to Firebase Hosting
+        script: |
+          firebase deploy --token "$FIREBASE_TOKEN"
+
     artifacts:
       - build/web.zip
       - '*.snap'
