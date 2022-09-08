@@ -1,0 +1,77 @@
+# Automatically generated on 2022-09-08 UTC from https://codemagic.io/app/63169a992923d87f6c9c38fa/settings
+# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
+
+workflows:
+  master-workflow:
+    name: Master CI/CD
+    max_build_duration: 60
+    environment:
+      flutter: default
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'master'
+  
+    scripts:
+      - name: Get Package & config
+        script: |
+          flutter packages pub get
+          flutter config --enable-web
+      - name: Build for Web
+        script: |
+          flutter build web --release
+          cd build/web
+          7z a -r ../web.zip ./*
+    artifacts:
+      - build/web.zip
+      - '*.snap'
+      - build/windows/**/*.msix
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - atusi08250522@gmail.com
+
+  pr-workflow:
+    name: Pull Request CI
+    max_build_duration: 60
+    environment:
+      flutter: default
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - pull_request
+      branch_patterns:
+        - pattern: '*'
+        - pattern: 'master'
+          include: false
+          source: false
+      cancel_previous_builds: true
+    scripts:
+      - name: Get Package & config
+        script: |
+          flutter packages pub get
+          flutter config --enable-web
+      - name: Unit Test
+        script: |
+          mkdir -p test-results
+          flutter test --machine > test-results/flutter.json      
+        test_report: test-results/flutter.json
+      - name: Integration tests Web
+        script: |
+          flutter config --enable-web
+          chromedriver --port=4444 &
+          flutter -d chrome drive --driver=test_driver/integration_driver.dart --target=integration_test/app_test.dart 
+      - name: Build for Web
+        script: |
+          flutter build web --release
+          cd build/web
+          7z a -r ../web.zip ./*
+    publishing:
+      email:
+        recipients:
+          - atusi08250522@gmail.com
